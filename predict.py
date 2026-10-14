@@ -22,7 +22,7 @@ def main():
         return
 
     # Keep this file in the same folder as the saved model.
-    model_path = "sentiment_model_improved.py"
+    model_path = "sentiment_model_improved.joblib"
 
     try:
         model = joblib.load(model_path)

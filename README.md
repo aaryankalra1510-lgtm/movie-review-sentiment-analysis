@@ -71,5 +71,4 @@ The script prints the predicted sentiment and, if supported by the model, its es
 - Compare with a pretrained transformer model such as DistilBERT.
 - Inspect misclassified reviews to identify common errors.
 
-## Attribution
-Mention the dataset source and any tutorials, code, or AI tools used when publishing or submitting this project. Ensure the dataset and its license permit your intended use.
+

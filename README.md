@@ -1,164 +1,75 @@
-# 🎬 Movie Review Sentiment Analysis
+# Movie Review Sentiment Analysis
 
-A machine learning project that uses Natural Language Processing (NLP) to classify movie reviews as **positive** or **negative**.
+## Overview
+This project uses natural language processing (NLP) to classify movie reviews as positive or negative. It uses TF-IDF to convert text into numerical features and Logistic Regression for classification.
 
-The project uses TF-IDF to convert text into numerical features and Logistic Regression to predict the sentiment of a review.
+## Dataset
+The project was trained and evaluated using labeled movie-review data. The text column contains each review, and the label indicates sentiment:
+- `0`: Negative
+- `1`: Positive
 
-## 📌 Project Overview
+Record the exact dataset and split used for each experiment so results can be reproduced.
 
-The goal of this project is to build a simple text-classification model that can analyze movie reviews and predict whether the sentiment expressed is positive or negative.
-
-### Features
-
-- Processes text using TF-IDF vectorization.
-- Uses Logistic Regression for sentiment classification.
-- Splits data into training and testing sets.
-- Evaluates model performance using accuracy, precision, recall, and F1-score.
-- Allows users to enter their own reviews for sentiment predictions.
-- Saves the trained model for later use.
-
-## 📊 Dataset
-
-**Dataset:** Rotten Tomatoes Movie Reviews
-
-**Source:** [Hugging Face — Rotten Tomatoes](https://huggingface.co/datasets/cornell-movie-review-data/rotten_tomatoes)
-
-The dataset contains movie reviews labelled by sentiment.
-
-| Label | Meaning |
-|---|---|
-| `0` | Negative |
-| `1` | Positive |
-
-For the version used in this project, the original dataset splits were combined and a new 80/20 training/testing split was created.
-
-- **80%** — Training data
-- **20%** — Testing data
-
-A fixed random seed was used to make the split reproducible.
-
-## 🛠️ Technologies Used
-
+## Technologies
 - Python
-- Pandas
-- Scikit-learn
-- Joblib
-- Google Colab
+- pandas
+- scikit-learn
+- joblib
 
-## 🧠 How the Model Works
+## Model Pipeline
+1. Clean and prepare review text and labels.
+2. Convert review text into TF-IDF features.
+3. Train a Logistic Regression classifier.
+4. Evaluate predictions using accuracy, precision, recall, F1-score, and a confusion matrix.
 
-1. **Data preparation:** Load the labelled movie reviews from CSV files.
-2. **Text vectorization:** TF-IDF converts review text into numerical features.
-3. **Model training:** Logistic Regression learns patterns associated with positive and negative sentiment.
-4. **Evaluation:** The trained model predicts sentiment for the test reviews.
-5. **Prediction:** New reviews can be entered to obtain sentiment predictions.
-6. **Model saving:** Joblib saves the trained pipeline for future use.
+## Evaluation Results
 
-## 📁 Project Structure
+The following results were recorded for one test run:
 
-```text
-movie-review-sentiment-analysis/
-├── sentiment_model.joblib
-├── train_model.py
-├── predict.py
-├── requirements.txt
-└── README.md
-```
+- **Test accuracy:** 75.81%
+- **Negative reviews:** precision 0.76, recall 0.75, F1-score 0.76 (1,067 examples)
+- **Positive reviews:** precision 0.75, recall 0.77, F1-score 0.76 (1,066 examples)
+- **Macro average:** precision 0.76, recall 0.76, F1-score 0.76
+- **Weighted average:** precision 0.76, recall 0.76, F1-score 0.76
+- **Total test examples:** 2,133
 
-- `sentiment_model.joblib` — Saved TF-IDF and Logistic Regression pipeline.
-- `train_model.py` — Script for training the model.
-- `predict.py` — Script for predicting sentiment on new reviews.
-- `requirements.txt` — Python dependencies.
-- `README.md` — Project documentation.
+### Confusion Matrix
 
-*Note: Add the Python scripts to the repository if you have saved them as separate files.*
+Rows are actual labels and columns are predicted labels, in the order **Negative, Positive**:
 
-## ⚙️ Installation
+|  | Predicted Negative | Predicted Positive |
+|---|---:|---:|
+| Actual Negative | 796 | 271 |
+| Actual Positive | 245 | 821 |
 
-Clone this repository:
+This means 796 negative reviews and 821 positive reviews were classified correctly. The model misclassified 271 negative reviews as positive and 245 positive reviews as negative.
 
-```bash
-git clone https://github.com/YOUR-USERNAME/movie-review-sentiment-analysis.git
-cd movie-review-sentiment-analysis
-```
+## Run Predictions
 
-Install the dependencies:
+Place `predict.py` and `sentiment_model_improved.joblib` in the same directory, then install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-The `requirements.txt` file should contain:
+Example:
 
-```text
-pandas
-scikit-learn
-joblib
+```bash
+python predict.py "This movie was amazing and entertaining!"
 ```
 
-## 🚀 Making Predictions
+The script prints the predicted sentiment and, if supported by the model, its estimated probability for that prediction. This probability is not a guarantee of correctness.
 
-After installing the dependencies and obtaining the trained model, run:
+## Limitations
+- The model may struggle with sarcasm, mixed opinions, slang, and context-dependent language.
+- Performance can differ on reviews from a different dataset or writing style.
+- Reported accuracy applies only to the particular test set used in this experiment.
 
-```python
-import joblib
+## Future Improvements
+- Compare TF-IDF settings with cross-validation.
+- Evaluate on a separate dataset to test generalization.
+- Compare with a pretrained transformer model such as DistilBERT.
+- Inspect misclassified reviews to identify common errors.
 
-model = joblib.load("sentiment_model.joblib")
-
-review = ["The movie was fantastic and entertaining!"]
-prediction = model.predict(review)[0]
-
-if prediction == 1:
-    print("Positive review")
-else:
-    print("Negative review")
-```
-
-Example output:
-
-```text
-Positive review
-```
-
-The example output is illustrative; actual predictions depend on the trained model.
-
-## 📈 Model Evaluation
-
-The model can be evaluated using:
-
-- **Accuracy:** Percentage of test reviews classified correctly.
-- **Precision:** How often predictions for a sentiment class are correct.
-- **Recall:** How many reviews of a sentiment class the model identifies.
-- **F1-score:** A combined measure of precision and recall.
-
-The measured test results should be added here after running the evaluation code:
-
-| Metric | Result |
-|---|---|
-| Test accuracy | Add your measured result |
-| Precision | Add your measured result |
-| Recall | Add your measured result |
-| F1-score | Add your measured result |
-
-## ⚠️ Limitations
-
-- The model may struggle with sarcasm, irony, and complex language.
-- Predictions depend on the quality and variety of the training data.
-- The model is designed for movie-review sentiment and may not generalize well to other types of text.
-- Predicted probabilities should not be interpreted as guaranteed confidence in the result.
-
-## 🔮 Future Improvements
-
-- Compare Logistic Regression with other classification algorithms.
-- Experiment with different text-preprocessing techniques.
-- Build a simple web interface for interactive predictions.
-- Explore transformer-based models such as BERT.
-- Test the model on additional review datasets.
-
-## 📜 Dataset Attribution
-
-The project uses the Rotten Tomatoes dataset available through Hugging Face. Please consult the dataset page for its attribution and usage terms.
-
-## 👤 Author
-
-Created as a beginner-friendly NLP and machine-learning project to explore text classification and model evaluation.
+## Attribution
+Mention the dataset source and any tutorials, code, or AI tools used when publishing or submitting this project. Ensure the dataset and its license permit your intended use.
